@@ -29,7 +29,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private_app" {
     for_each = local.private_app_subnets
-    vpc_id            = aws_vpc.main_project_vpc.id
+    vpc_id            = aws_vpc.this.id
     cidr_block        = cidrsubnet(var.vpc_cidr, 8, each.value.subnet_num)
     availability_zone = each.value.az
     tags = merge(
@@ -44,7 +44,7 @@ resource "aws_subnet" "private_app" {
 
 resource "aws_subnet" "private_db" {
     for_each = local.private_db_subnets
-    vpc_id            = aws_vpc.main_project_vpc.id
+    vpc_id            = aws_vpc.this.id
     cidr_block        = cidrsubnet(var.vpc_cidr, 8, each.value.subnet_num)
     availability_zone = each.value.az
     tags = merge(
