@@ -109,7 +109,7 @@ resource "aws_route_table" "public" {
 
 resource "aws_route" "public_internet" {
   route_table_id         = aws_route_table.public.id
-  destination_cidr_block = "0.0.0/0"
+  destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.this.id
 }
 resource "aws_route_table_association" "public" {
@@ -131,7 +131,7 @@ resource "aws_route_table" "private_app" {
 
 resource "aws_route" "private_app_internet" {
   route_table_id         = aws_route_table.private_app.id
-  destination_cidr_block = "0.0.0/0"
+  destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.this.id
 }
 resource "aws_route_table_association" "private_app" {
@@ -153,7 +153,7 @@ resource "aws_route_table" "private_db" {
 
 resource "aws_route" "private_db_internet" {
   route_table_id         = aws_route_table.private_db.id
-  destination_cidr_block = "0.0.0/0"
+  destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.this.id
 }
 
