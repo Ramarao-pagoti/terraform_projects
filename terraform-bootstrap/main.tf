@@ -4,15 +4,15 @@ module "s3_backend" {
 }
 
 module "terraform-role" {
-  source    = "./modules/terraform-role"
+  source                = "./modules/terraform-role"
   trusted_principal_arn = "arn:aws:iam::030179310796:user/ramarao"
-  role_name = "Terraform-execution-role"
+  role_name             = "Terraform-execution-role"
 }
 
 resource "aws_iam_policy" "Terraform-execution-role-policy" {
   name        = "Terraform-execution-role-policy"
   description = "Policy for Terraform execution role"
-  policy      = jsonencode({
+  policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
