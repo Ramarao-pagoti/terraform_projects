@@ -67,3 +67,31 @@ resource "aws_internet_gateway" "this" {
     }
   )
 }
+
+resource "aws_eip" "nat" {
+  domain = "vpc"
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "ecommerce-${var.environment}-nat-eip"
+    }
+  )
+}
+
+resource "aws_nat_gateway" "this" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public["public-a"].id
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "ecommerce-${var.environment}-nat"
+    }
+  )
+
+
+depends_on = [aws_internet_gateway.this]
+
+}
+
