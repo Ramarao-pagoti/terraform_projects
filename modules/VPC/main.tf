@@ -22,6 +22,7 @@ resource "aws_subnet" "public" {
       {
         Name = each.key
         "kubernetes.io/role/elb" = "1"
+        "kubernetes.io/cluster/${var.environment}-eks-cluster" = "shared"
       }
     )
   
@@ -38,6 +39,7 @@ resource "aws_subnet" "private_app" {
         Name = each.key
 
       "kubernetes.io/role/internal-elb" = "1"
+      "kubernetes.io/cluster/${var.environment}-eks-cluster" = "shared"
     }
     )
     
