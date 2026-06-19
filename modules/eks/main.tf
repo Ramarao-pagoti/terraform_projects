@@ -11,7 +11,7 @@ resource "aws_eks_cluster" "this" {
     "api",
     "audit",
     "authenticator",
-    "controlManager",
+    "controllerManager",
     "scheduler"
   ]
 }
