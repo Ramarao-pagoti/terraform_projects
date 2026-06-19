@@ -73,3 +73,42 @@ resource "aws_iam_openid_connect_provider" "eks" {
     data.tls_certificate.eks.certificates[0].sha1_fingerprint
   ]
 }
+
+data "aws_iam_policy_document" "alb_controller_assume_role" {
+    statement {
+      effect = "Allow"
+      actions = [
+        "sts:AssumeRoleWithWebIdentity"
+      ]
+      principals {
+        type = "Federated"
+        identifiers = [
+            aws_iam_openid_connect_provider.eks.arn
+        ]
+      }
+     condition {
+       test = "StringEquals"
+       variable = "${replace(var.oidc_issuer_url, "https://", "")}:sub"
+       values = [
+        "system:serviceaccount:kube-system:aws-load-balancer-controller"
+       ]
+     }
+    condition {
+      test = "StringEquals"
+      variable = "${replace(var.oidc_issuer_url, "https://", "")}:aud"
+      values = [
+        "sts.amazonaws.com"
+      ]
+    }
+
+
+    }
+  
+}
+
+resource "aws_iam_role" "alb_controller" {
+    name = "${var.environment}-alb-controller-role"
+    assume_role_policy = data.aws_iam_policy_document.alb_controller_assume_role.json
+  
+}
+  
