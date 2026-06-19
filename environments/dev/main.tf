@@ -9,3 +9,9 @@ module "security-group" {
   source = "../../modules/security-group"
   vpc_id = module.vpc.vpc_id 
 }
+
+module "ecr" {
+  source = "../../modules/ecr"
+  environment = var.environment
+  repositories = var.repositories  
+}
