@@ -1,5 +1,5 @@
 resource "aws_security_group" "alb" {
-   name = alb-sg
+   name = "alb-sg"
    description = "Security group for ALB"
     vpc_id = var.vpc_id
    tags = {
