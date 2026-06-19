@@ -29,3 +29,9 @@ module "eks" {
   cluster_role_arn = module.iam.eks_cluster_role_arn
   eks_node_sg_id = module.security-group.eks_nodes_sg_id
 }
+
+module "iam" {
+  source = "../../modules/iam"
+  environment = var.environment
+  oidc_issuer_url = module.eks.oidc_issuer_url
+}

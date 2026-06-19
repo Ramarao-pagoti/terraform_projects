@@ -60,3 +60,16 @@ resource "aws_iam_role_policy_attachment" "cni_policy" {
     policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"  
 }
 
+data "tls_certificate" "eks" {
+    url = var.oidc_issuer_url  
+}
+
+resource "aws_iam_openid_connect_provider" "eks" {
+    url = var.oidc_issuer_url
+    client_id_list = [
+        "sts.amazonaws.com"
+    ]
+  thumbprint_list = [
+    data.tls_certificate.eks.certificates[0].sha1_fingerprint
+  ]
+}
