@@ -113,18 +113,18 @@ resource "aws_route_table" "public" {
     route_table_id = aws_route_table.public.id
   }
   
-  resource "aws_route_table" "private" {
+  resource "aws_route_table" "private_app" {
     vpc_id = aws_vpc.this.id
     tags = merge(
       local.common_tags,
       {
-        Name = "${var.environment}-private-rt"
+        Name = "${var.environment}-private-app-rt"
       }
-    )
+    )   
   }
 
-  resource "aws_route" "private_nat" {
-    route_table_id         = aws_route_table.private.id
+  resource "aws_route" "private_app_internet" {
+    route_table_id         = aws_route_table.private_app.id
     destination_cidr_block = "0.0.0.0/0"
     nat_gateway_id         = aws_nat_gateway.this.id
   }
@@ -132,11 +132,21 @@ resource "aws_route_table" "public" {
     resource "aws_route_table_association" "private_app" {
         for_each = aws_subnet.private_app
         subnet_id      = each.value.id
-        route_table_id = aws_route_table.private.id
+        route_table_id = aws_route_table.private_app.id
+    }
+
+    resource "aws_route_table" "private_data" {
+        vpc_id = aws_vpc.this.id
+        tags = merge(
+          local.common_tags,
+          {
+            Name = "${var.environment}-private-data-rt"
+          }
+        )   
     }
 
     resource "aws_route_table_association" "private_data" {
         for_each = aws_subnet.private_data
         subnet_id      = each.value.id
-        route_table_id = aws_route_table.private.id
+        route_table_id = aws_route_table.private_data.id
     }
