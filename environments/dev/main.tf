@@ -20,3 +20,12 @@ module "iam" {
   source = "../../modules/iam"
   environment = var.environment
 }
+
+module "eks" {
+  source = "../../modules/eks"
+  environment = var.environment
+  private_subnet_ids = module.vpc.private_app_subnet_ids
+  node_role_arn = module.iam.eks_node_role_arn
+  cluster_role_arn = module.iam.eks_cluster_role_arn
+  eks_node_sg_id = module.security-group.eks_nodes_sg_id
+}
