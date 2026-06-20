@@ -154,7 +154,7 @@ resource "aws_iam_role" "karpenter" {
 
 resource "aws_iam_policy" "karpenter" {
   name = "${var.environment}-karpenter-policy"
-  policy = file("${path.module}/karpenter-cotroller-policy.json")
+  policy = file("${path.module}/karpenter-controller-policy.json")
   
 }
 
