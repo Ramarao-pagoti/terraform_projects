@@ -40,6 +40,7 @@ resource "aws_subnet" "private_app" {
 
       "kubernetes.io/role/internal-elb" = "1"
       "kubernetes.io/cluster/${var.environment}-eks-cluster" = "shared"
+      "karpenter.sh/discovery" = "${var.environment}-eks-cluster"
     }
     )
     
