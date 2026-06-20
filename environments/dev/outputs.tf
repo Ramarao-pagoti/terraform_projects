@@ -17,3 +17,6 @@ output "alb_controller_role_arn" {
 output "cluster_security_group_id" {
   value = module.eks.cluster_security_group_id
 }
+output "karpenter_node_role_name" {
+    value = module.iam.karpenter_node_role_name  
+}
