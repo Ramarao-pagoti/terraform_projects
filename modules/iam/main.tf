@@ -124,7 +124,7 @@ resource "aws_iam_role_policy_attachment" "alb_controller" {
 
 data "aws_iam_policy_document" "karpenter_assume_role" {
   statement {
-    effect = "ALLOW"
+    effect = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
       type = "Federated"
