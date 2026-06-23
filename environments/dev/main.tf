@@ -51,3 +51,11 @@ resource "aws_ec2_tag" "karpenter_cluster_sg_discovery" {
   value = module.eks.cluster_name
 }
 
+module "acm" {
+  source = "../../modules/acm"
+
+  domain_name    = "mybanking.shop"
+  hosted_zone_id = module.route53.route53_zone_id
+
+  environment = var.environment
+}
