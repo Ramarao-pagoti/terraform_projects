@@ -36,3 +36,7 @@ output "hosted_zone_id" {
 output "certificate_arn" {
   value = module.acm.certificate_arn
 }
+
+output "external_dns_role_arn" {
+  value = module.iam.external_dns_role_arn
+}

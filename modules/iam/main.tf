@@ -207,3 +207,91 @@ resource "aws_iam_role_policy_attachment" "karpenter_SSM" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"  
   
 }
+
+data "aws_iam_policy_document" "external_dns_assume_role" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sts:AssumeRoleWithWebIdentity"
+    ]
+
+    principals {
+      type = "Federated"
+
+      identifiers = [
+        aws_iam_openid_connect_provider.eks.arn
+      ]
+    }
+
+    condition {
+      test = "StringEquals"
+
+      variable = "${replace(var.oidc_issuer_url, "https://", "")}:sub"
+
+      values = [
+        "system:serviceaccount:external-dns:external-dns"
+      ]
+    }
+
+    condition {
+      test = "StringEquals"
+
+      variable = "${replace(var.oidc_issuer_url, "https://", "")}:aud"
+
+      values = [
+        "sts.amazonaws.com"
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role" "external_dns" {
+  name = "${var.environment}-external-dns-role"
+
+  assume_role_policy =
+    data.aws_iam_policy_document.external_dns_assume_role.json
+}
+
+resource "aws_iam_policy" "external_dns" {
+  name = "${var.environment}-external-dns-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "route53:ChangeResourceRecordSets"
+        ]
+
+        Resource = [
+          "arn:aws:route53:::hostedzone/*"
+        ]
+      },
+
+      {
+        Effect = "Allow"
+
+        Action = [
+          "route53:ListHostedZones",
+          "route53:ListResourceRecordSets",
+          "route53:ListTagsForResource"
+        ]
+
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "external_dns" {
+  role       = aws_iam_role.external_dns.name
+  policy_arn = aws_iam_policy.external_dns.arn
+}
+
+output "external_dns_role_arn" {
+  value = aws_iam_role.external_dns.arn
+}
