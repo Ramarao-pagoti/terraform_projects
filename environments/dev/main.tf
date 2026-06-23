@@ -51,8 +51,3 @@ resource "aws_ec2_tag" "karpenter_cluster_sg_discovery" {
   value = module.eks.cluster_name
 }
 
-module "route53" {
-  source = "../../modules/route53"
-  domain_name = "mybanking.shop"
-  environment = var.environment
-}
