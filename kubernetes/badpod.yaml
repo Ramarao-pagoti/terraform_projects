@@ -6,4 +6,6 @@ spec:
   containers:
   - name: crash
     image: nginx
-    command: ["sh","-c","exit 1"]
+    command: 
+      - sleep
+      - "3000"
