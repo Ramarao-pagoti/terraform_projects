@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  name: bad-image
-
-spec:
-  containers:
-  - name: app
-    image: nginx:notexist
