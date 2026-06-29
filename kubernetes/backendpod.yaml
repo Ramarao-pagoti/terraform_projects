@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+  namespace: netpol-lab
+  labels:
+    app: backend
+spec:
+  containers:
+  - name: nginx
+    image: nginx
